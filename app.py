@@ -1,54 +1,21 @@
 # -*- coding: utf-8 -*-
-from dash import Dash, dcc, html, Input, Output
+from dash import Dash, dcc, html
+import plotly.graph_objs as go
+import pandas as pd
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 app = Dash(__name__, external_stylesheets=external_stylesheets)
 
-all_options = {
-    'America': ['New York City', 'San Francisco', 'Cincinnati'],
-    'Canada': [u'Montréal', 'Toronto', 'Ottawa']
-}
+df = pd.read_csv('time-series-starter-dataset.zip')
+df.dropna(subset=['Sales_quantity'], inplace=True)
+
+fig = go.Figure(data=[go.Scatter(x=df['Period'], y=df['Sales_quantity'])])
+
 app.layout = html.Div([
-    dcc.RadioItems(
-        list(all_options.keys()),
-        'America',
-        id='countries-radio',
-    ),
-
-    html.Hr(),
-
-    dcc.RadioItems(id='cities-radio'),
-
-    html.Hr(),
-
-    html.Div(id='display-selected-values')
+    html.H1(id='title', children='Sales Quantity in Time'),
+    dcc.Graph(figure=fig)
 ])
 
-
-@app.callback(
-    Output('cities-radio', 'options'),
-    Input('countries-radio', 'value'))
-def set_cities_options(selected_country):
-    return [{'label': i, 'value': i} for i in all_options[selected_country]]
-
-
-@app.callback(
-    Output('cities-radio', 'value'),
-    Input('cities-radio', 'options'))
-def set_cities_value(available_options):
-    return available_options[0]['value']
-
-
-@app.callback(
-    Output('display-selected-values', 'children'),
-    Input('countries-radio', 'value'),
-    Input('cities-radio', 'value'))
-def set_display_children(selected_country, selected_city):
-    return u'{} is a city in {}'.format(
-        selected_city, selected_country,
-    )
-
-
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run_server(debug=False)
