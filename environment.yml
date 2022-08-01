@@ -1,0 +1,10 @@
+name: app
+channels:
+  - defaults
+dependencies:
+  - python=3.9
+  - dash
+  - pip
+  - pip:
+      # Requirements that use the dockerized API
+      - -r requirements.txt
