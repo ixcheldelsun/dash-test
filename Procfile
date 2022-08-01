@@ -1,1 +1,1 @@
-gunicorn myapp.webapp:server
+gunicorn app:server

@@ -6,6 +6,7 @@ import pandas as pd
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 app = Dash(__name__, external_stylesheets=external_stylesheets)
+server = app.server
 
 df = pd.read_csv('time-series-starter-dataset.zip')
 df.dropna(subset=['Sales_quantity'], inplace=True)
@@ -18,5 +19,4 @@ app.layout = html.Div([
 ])
 
 if __name__ == '__main__':
-    server = app.server
     app.run_server(debug=False)
