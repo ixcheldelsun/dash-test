@@ -2,10 +2,10 @@ from dash import dcc, html, Input, Output, callback
 import plotly.express as px
 import pandas as pd
 import numpy as np
-
+from urllib.parse import urlparse, parse_qs
 import dash
 
-dash.register_page(__name__, path_template="/predictions/<id_fi>")
+dash.register_page(__name__, path_template="/predictions")
 
 # def layout(id_fi=None):
     
@@ -19,12 +19,12 @@ dash.register_page(__name__, path_template="/predictions/<id_fi>")
 #     dcc.Graph(figure=fig)
 # ])
 
-def layout(id_fi=None, **other_unknown_query_strings):
+def layout(id_fi=None):
     #df = pd.read_csv('time-series-starter-dataset.zip')
     #df.dropna(subset=['Sales_quantity'], inplace=True)
 
     #fig = go.Figure(data=[go.Scatter(x=df['Period'], y=df['Sales_quantity'])])
-    #import pdb; pdb.set_trace()
+    
     
     
 
@@ -37,10 +37,10 @@ def layout(id_fi=None, **other_unknown_query_strings):
 	])
     
 @callback(Output('scatter', 'figure'),
-              [Input('url', 'pathname')])
-def display_page(pathname):
-    id_fi = pathname.split('/')[-1]
-    np.random.seed(int(id_fi)) 
+              [Input('url', 'href')])
+def display_page(href:str):
+    parsed_url = urlparse(href)
+    np.random.seed(int(parse_qs(parsed_url.query)["id_fi"][0])) 
     
     random_x= np.random.randint(1,101,100) 
     random_y= np.random.randint(1,101,100) 
