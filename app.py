@@ -1,22 +1,19 @@
 # -*- coding: utf-8 -*-
-from dash import Dash, dcc, html
-import plotly.graph_objs as go
-import pandas as pd
+from dash import Dash
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
-app = Dash(__name__, external_stylesheets=external_stylesheets)
+app = Dash(__name__, external_stylesheets=external_stylesheets, use_pages=True)
+
+#from pages import predictions
+
+import dash
+import dash_bootstrap_components as dbc
+from dash import dcc, html
+from dash.dependencies import Input, Output, State
+
 server = app.server
 
-df = pd.read_csv('time-series-starter-dataset.zip')
-df.dropna(subset=['Sales_quantity'], inplace=True)
-
-fig = go.Figure(data=[go.Scatter(x=df['Period'], y=df['Sales_quantity'])])
-
-app.layout = html.Div([
-    html.H1(id='title', children='Sales Quantity in Time'),
-    dcc.Graph(figure=fig)
-])
 
 if __name__ == '__main__':
-    app.run_server(debug=False)
+	app.run_server(debug=True)
